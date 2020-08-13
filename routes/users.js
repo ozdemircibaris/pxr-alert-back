@@ -22,14 +22,12 @@ router.post('/signin', (req, res, next) => {
     where: {
       email: body.email,
       password: body.password
-    }
-  })
-    .then((data) => {
-      if(data) {
-        res.send({ status: "success", data: data.dataValues })
-      } else {
-        res.status(404).send({ status: "error", description: "Email ya da şifre yanlış."})
-        }
+    }}).then((data) => {
+    if(data) {
+      res.send({ status: "success", data: data.dataValues })
+    } else {
+      res.status(404).send({ status: "error", description: "Email ya da şifre yanlış."})
+      }
     })
 })
 
