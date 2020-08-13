@@ -1,3 +1,4 @@
+const path = require('path');
 const Sequelize = require('sequelize');
 const sequelize = new Sequelize("pxr-alert", "root", "1337", {
     host: "localhost",
@@ -5,8 +6,7 @@ const sequelize = new Sequelize("pxr-alert", "root", "1337", {
 })
 
 const db = {};
-
-db.userModel = sequelize.import(__dirname + '/models/userModel.js');
+db.userModel = require(path.join(__dirname, '/models/userModel.js'))(sequelize, Sequelize.DataTypes)
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
