@@ -1,6 +1,6 @@
-let express = require('express');
-let router  = express.Router();
-let { sequelize, taskCategoriesModel } = require('../db');
+const express = require('express');
+const router  = express.Router();
+const { taskCategoriesModel } = require('../db');
 const checkAuth = require('../middleware/checkauth');
 const _ = require('underscore');
 const bodyParser = require('body-parser');
@@ -18,10 +18,12 @@ router.get('/', checkAuth, (req, res, next) => {
 });
 
 router.post('/', checkAuth, (req, res, next) => {
-    let body = _.pick(req.body, "email", "password");
-
-    console.log(body)
-    console.log({title, color})
+    const { title, color } = req.body;
+    taskCategoriesModel.create(req.body).then((cat) => {
+        if(cat) res.json({status: "success", data: cat.toJSON()});
+    }, (e) => {
+        return res.status(500).send()
+    })
 })
 
 module.exports = router;

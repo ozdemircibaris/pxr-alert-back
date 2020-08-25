@@ -4,11 +4,12 @@ let path         = require('path');
 let cookieParser = require('cookie-parser');
 let logger       = require('morgan');
 
-let indexRouter        = require('./routes/index');
-let usersRouter        = require('./routes/users');
-let notificationRouter = require('./routes/notifications');
-let tasksRouter        = require('./routes/tasks');
-let mytasksRouter      = require("./routes/mytasks");
+let indexRouter          = require('./routes/index');
+let usersRouter          = require('./routes/users');
+let notificationRouter   = require('./routes/notifications');
+let tasksRouter          = require('./routes/tasks');
+let mytasksRouter        = require("./routes/mytasks");
+let taskCategoriesRouter = require("./routes/taskCategories");
 
 
 const cors = require('cors');
@@ -31,6 +32,7 @@ app.use('/users', usersRouter);
 app.use('/notification', notificationRouter);
 app.use('/tasks', tasksRouter);
 app.use('/mytasks', mytasksRouter);
+app.use('/task-categories', taskCategoriesRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
