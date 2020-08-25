@@ -9,13 +9,17 @@ module.exports = (sequelize, Sequelize) => {
             allowNull: false
         },
         user_id: {
-            id: Sequelize.INTEGER,
+            type: Sequelize.INTEGER,
             allowNull: false,
         },
         cat_id: {
-            id: Sequelize.INTEGER,
+            type: Sequelize.INTEGER,
             allowNull: false
         }
+    },
+    {
+        freezeTableName: true
+
     })
     return taskModel;
 }

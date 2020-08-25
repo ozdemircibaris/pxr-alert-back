@@ -1,14 +1,24 @@
-const path = require('path');
 const Sequelize = require('sequelize');
 const sequelize = new Sequelize("pxr-alert", "root", "1337", {
     host: "localhost",
     dialect: "mysql"
 })
 
-const db = {};
-db.userModel = require(path.join(__dirname, '/models/userModel.js'))(sequelize, Sequelize.DataTypes)
+const user           = require('./models/userModel');
+const task           = require('./models/taskModel');
+const myTask         = require('./models/myTaskModel');
+const taskCategories = require('./models/taskCategoriesModel');
 
-db.sequelize = sequelize;
-db.Sequelize = Sequelize;
+const userModel           = user(sequelize, Sequelize);
+const taskModel           = task(sequelize, Sequelize);
+const myTaskModel         = myTask(sequelize, Sequelize);
+const taskCategoriesModel = taskCategories(sequelize, Sequelize);
 
-module.exports = db;
+
+module.exports = {
+    sequelize,
+    userModel,
+    taskModel,
+    myTaskModel,
+    taskCategoriesModel
+}
