@@ -89,3 +89,5 @@ router.delete("/delete/:id", checkAuth, (req, res) => {
         });
     });
 });
+
+module.exports = router;

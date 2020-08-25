@@ -1,8 +1,8 @@
-let express    = require('express');
-let router     = express.Router();
-let bodyParser = require('body-parser');
-let _          = require('underscore');
-let { userModel } = require('../db');
+const express    = require('express');
+const router     = express.Router();
+const bodyParser = require('body-parser');
+const _          = require('underscore');
+const { userModel } = require('../db');
 const jwt = require('jsonwebtoken');
 
 router.use(bodyParser.json())
@@ -10,7 +10,7 @@ router.use(bodyParser.json())
 router.get('/', (req, res, next) => {
   userModel.findAll().then((users) => {
     if(users) {
-      res.json({status: "success", data: users})
+      res.json({ status: "success", data: users })
     } else {
       res.json(users)
     }
