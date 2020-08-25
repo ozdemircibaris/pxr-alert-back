@@ -7,12 +7,14 @@ let logger       = require('morgan');
 let indexRouter        = require('./routes/index');
 let usersRouter        = require('./routes/users');
 let notificationRouter = require('./routes/notifications');
+const cors = require('cors');
 
 let app = express();
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
+app.use(cors())
 
 app.use(logger('dev'));
 app.use(express.json());
