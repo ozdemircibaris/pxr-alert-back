@@ -30,10 +30,10 @@ router.post('/signin', (req, res, next) => {
         email: body.email,
       },
         'secret_key',
-      {
-        expiresIn :"2h"
-      }
-    )
+        {
+          expiresIn :"2h"
+        }
+      )
       res.send({ 
         status: "success", 
         data: data.dataValues, 
@@ -53,7 +53,7 @@ router.post('/signin', (req, res, next) => {
 router.post('/signup', (req, res, next) => {
   const { fullName, email, password, phoneToken } = req.body
   userModel.create(req.body).then((user) => {
-     if (user) { 
+    if (user) { 
       res.json({
         status: "success", 
         data: user.toJSON()
