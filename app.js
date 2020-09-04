@@ -27,12 +27,12 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/notification', notificationRouter);
-app.use('/tasks', tasksRouter);
-app.use('/mytasks', mytasksRouter);
-app.use('/task-categories', taskCategoriesRouter);
+app.use('/api/v1/', indexRouter);
+app.use('/api/v1/users', usersRouter);
+app.use('/api/v1/notification', notificationRouter);
+app.use('/api/v1/tasks', tasksRouter);
+app.use('/api/v1/mytasks', mytasksRouter);
+app.use('/api/v1/task-categories', taskCategoriesRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
