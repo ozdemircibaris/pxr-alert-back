@@ -4,10 +4,11 @@ const bodyParser = require('body-parser');
 const _          = require('underscore');
 const { userModel } = require('../db');
 const jwt = require('jsonwebtoken');
+const checkAuth = require('../middleware/checkauth');
 
 router.use(bodyParser.json())
 /* GET users listing. */
-router.get('/', (req, res, next) => {
+router.get('/', checkAuth, (req, res, next) => {
   userModel.findAll().then((users) => {
     if(users) {
       res.json({ status: "success", data: users })
