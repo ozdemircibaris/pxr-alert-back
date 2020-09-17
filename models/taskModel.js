@@ -1,5 +1,9 @@
 module.exports = (sequelize, Sequelize) => {
     const taskModel = sequelize.define('taskModel', {
+        cat_id: {
+            type : Sequelize.INTEGER,
+            allowNull: false
+        },
         title: {
             type: Sequelize.STRING,
             allowNull: false
