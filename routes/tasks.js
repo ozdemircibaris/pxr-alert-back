@@ -21,7 +21,7 @@ router.get('/:id', (req, res) => {
 
 /* POST adding data */
 router.post('/', (req, res, next) => {
-  let body = _.pick(req.body, "title", "subTitle", "jobDate", "user_id");
+  let body = _.pick(req.body, "cat_id","title", "subTitle", "jobDate", "user_id");
   taskModel.create(body).then((data) => {
     if(data) res.json({status: "success", data: data.toJSON()});
   }, (e) => {
@@ -54,9 +54,12 @@ router.delete('/:id',(req,res,next) => {
 /* UPDATE  Process */
 router.put('/:id', (req, res) => {
   let id = req.params.id;
-  let body = _.pick(req.body, "title", "subTitle", "jobDate");
+  let body = _.pick(req.body, "cat_id","title", "subTitle", "jobDate");
   let attributes = {};
 
+  if(body.hasOwnProperty("cat_id")){
+    attributes.cat_id = body.cat_id;
+  }
   if(body.hasOwnProperty("title")){
     attributes.title = body.title;
   }
