@@ -54,7 +54,7 @@ router.post('/signin', (req, res, next) => {
 router.post('/signup', (req, res, next) => {
   const { fullName, email, password, phoneToken } = req.body
   if(fullName && email && password && phoneToken ) {
-    userModel.create(body).then((data) => {
+    userModel.create(req.body).then((data) => {
       if(data) res.json({status: "success", data: data.toJSON()});
     })
   } else {
