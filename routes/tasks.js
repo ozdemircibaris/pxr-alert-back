@@ -24,7 +24,7 @@ router.get('/:id', (req, res) => {
 router.post('/', (req, res, next) => {
   const { cat_id, title, subTitle, jobDate, user_id } = req.body;
   if(cat_id && title && subTitle && jobDate && user_id ) {
-    taskModel.create(body).then((data) => {
+    taskModel.create(req.body).then((data) => {
       if(data) res.json({status: "success", data: data.toJSON()});
     })
   } else {
