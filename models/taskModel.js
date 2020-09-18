@@ -22,8 +22,8 @@ module.exports = (sequelize, Sequelize) => {
         }
     },
     {
-        freezeTableName: true
-
+        freezeTableName: true,
+        timestamps: false
     })
     return taskModel;
 }

@@ -14,6 +14,13 @@ const taskModel           = task(sequelize, Sequelize);
 const myTaskModel         = myTask(sequelize, Sequelize);
 const taskCategoriesModel = taskCategories(sequelize, Sequelize);
 
+taskModel.belongsTo(taskCategoriesModel, { foreignKey: 'cat_id' });
+
+// taskModel.hasMany(dietListModel, { foreignKey: 'sub_cat_id' });
+
+// taskCategoriesModel.belongsTo(taskModel, { foreignKey: 'cat_id' });
+
+// dietListModel.belongsTo(dietSubCategoriesModel, { foreignKey: 'sub_cat_id' });
 
 module.exports = {
     sequelize,

@@ -2,7 +2,7 @@ let express = require('express');
 let router  = express.Router();
 const checkAuth = require('../middleware/checkauth');
 let _       = require('underscore');
-const { taskModel } = require("../db")
+const { taskModel, taskCategoriesModel } = require("../db")
 
 /* GET just selected users data */
 router.get('/:id', (req, res) => {
@@ -10,10 +10,11 @@ router.get('/:id', (req, res) => {
   taskModel.findAll({
     where : {
       user_id : id
-    }
+    },
+    include: taskCategoriesModel
   }).then((tasks) => {
     res.json({
-      status : "Success",
+      status : "success",
       data : tasks
     })
   })
@@ -21,12 +22,14 @@ router.get('/:id', (req, res) => {
 
 /* POST adding data */
 router.post('/', (req, res, next) => {
-  let body = _.pick(req.body, "cat_id","title", "subTitle", "jobDate", "user_id");
-  taskModel.create(body).then((data) => {
-    if(data) res.json({status: "success", data: data.toJSON()});
-  }, (e) => {
-    return res.status(500).send()
-  })
+  const { cat_id, title, subTitle, jobDate, user_id } = req.body;
+  if(cat_id && title && subTitle && jobDate && user_id ) {
+    taskModel.create(body).then((data) => {
+      if(data) res.json({status: "success", data: data.toJSON()});
+    })
+  } else {
+    return res.status(500).send({ status: "error", message: "Eksik parametre" })
+  }
 })
 
 /* DELETE  Process */
@@ -43,7 +46,7 @@ router.delete('/:id',(req,res,next) => {
       })
     } else {
       res.json({
-        status : "Success"
+        status : "success"
       });
     }
   }, () => {
@@ -78,7 +81,7 @@ router.put('/:id', (req, res) => {
     if(data){
         data.update(attributes).then(data => {
           res.json({
-            status : "Success",
+            status : "success",
             data : data.toJSON()
           })
         })
