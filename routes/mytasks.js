@@ -25,7 +25,7 @@ router.post("/add", checkAuth, (req, res) => {
     }
 });
 
-router.get("/:user_id", checkAuth, (res, req) => {
+router.get("/:user_id", checkAuth, (req, res) => {
     myTaskModel.findAll({
         where: {
             user_id: req.params.user_id
@@ -45,7 +45,7 @@ router.get("/:user_id", checkAuth, (res, req) => {
     });
 });
 
-router.get("/:user_id/category/:cat_id", checkAuth, (res, req) => {
+router.get("/:user_id/category/:cat_id", checkAuth, (req, res) => {
     myTaskModel.findAll({
         where: {
             user_id: req.params.user_id,
