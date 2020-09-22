@@ -1,5 +1,9 @@
 module.exports = (sequelize, Sequelize) => {
     const taskModel = sequelize.define('taskModel', {
+        cat_id: {
+            type : Sequelize.INTEGER,
+            allowNull: false
+        },
         title: {
             type: Sequelize.STRING,
             allowNull: false
@@ -18,8 +22,8 @@ module.exports = (sequelize, Sequelize) => {
         }
     },
     {
-        freezeTableName: true
-
+        freezeTableName: true,
+        timestamps: false
     })
     return taskModel;
 }
