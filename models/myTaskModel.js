@@ -15,6 +15,10 @@ module.exports = (sequelize, Sequelize) => {
         cat_id: {
             type: Sequelize.INTEGER,
             allowNull: false
+        },
+        color: {
+            type: Sequelize.STRING,
+            allowNull: false
         }
     },
     {
