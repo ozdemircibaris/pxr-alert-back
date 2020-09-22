@@ -24,9 +24,20 @@ router.get('/:id', (req, res) => {
 router.post('/', (req, res, next) => {
   const { cat_id, title, subTitle, jobDate, user_id } = req.body;
   if(cat_id && title && subTitle && jobDate && user_id ) {
-    taskModel.create(req.body).then((data) => {
-      if(data) res.json({status: "success", data: data.toJSON()});
-    })
+    console.log({cat_id, title, subTitle, jobDate, user_id })
+    let attributes = {};
+    attributes = req.body;
+    for (let j = 0; j < user_id.length; j++) {
+      attributes.user_id = user_id[j];
+
+      if(j == user_id.length -1) {
+        taskModel.create(attributes).then((data) => {
+          if(data) res.json({ status: "success" });
+        })
+      } else {
+        taskModel.create(attributes)
+      }
+    }
   } else {
     return res.status(500).send({ status: "error", message: "Eksik parametre" })
   }
