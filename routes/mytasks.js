@@ -1,12 +1,16 @@
 const express = require("express");
 const router = express.Router();
 const checkAuth = require("../middleware/checkauth");
-const { myTaskModel } = require("../db");
+const { myTaskModel, taskCategoriesModel } = require("../db");
 
 router.post("/add", checkAuth, (req, res) => {
-    const { title, subTitle, user_id, cat_id, color } = req.body;
+    const { title, subTitle, user_id, cat_id } = req.body;
 
+<<<<<<< HEAD
     if ( title != null && subTitle != null && user_id != null && cat_id != null) {
+=======
+    if ( title != null && subTitle != null && user_id != null && cat_id != null ) {
+>>>>>>> 1b64666c1c149779339d6eb636de2accd7b8d92c
         myTaskModel.create(req.body).then(myTask => {
             res.json({
                 status: "success",
@@ -29,7 +33,8 @@ router.get("/:user_id", checkAuth, (req, res) => {
     myTaskModel.findAll({
         where: {
             user_id: req.params.user_id
-        }
+        },
+        include: [{ model: taskCategoriesModel }]
     }).then(myTasks => {
         if ( myTasks ) {
             res.status(200).json({
