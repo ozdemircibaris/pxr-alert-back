@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const sequelize = new Sequelize("pxr-alert", "root", "1337", {
+const sequelize = new Sequelize("pxr-alert", "root", "Ass122...", {
     host: "localhost",
     dialect: "mysql"
 })
@@ -15,8 +15,9 @@ const myTaskModel         = myTask(sequelize, Sequelize);
 const taskCategoriesModel = taskCategories(sequelize, Sequelize);
 
 taskModel.belongsTo(taskCategoriesModel, { foreignKey: 'cat_id' });
+myTaskModel.belongsTo(taskCategoriesModel, { foreignKey: 'cat_id' });
 
-// taskModel.hasMany(dietListModel, { foreignKey: 'sub_cat_id' });
+taskCategoriesModel.hasOne(myTaskModel, { foreignKey: 'cat_id' });
 
 // taskCategoriesModel.belongsTo(taskModel, { foreignKey: 'cat_id' });
 
