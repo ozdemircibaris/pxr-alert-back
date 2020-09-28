@@ -6,7 +6,7 @@ const { myTaskModel } = require("../db");
 router.post("/add", checkAuth, (req, res) => {
     const { title, subTitle, user_id, cat_id, color } = req.body;
 
-    if ( title != null && subTitle != null && user_id != null && cat_id != null && color != null ) {
+    if ( title != null && subTitle != null && user_id != null && cat_id != null) {
         myTaskModel.create(req.body).then(myTask => {
             res.json({
                 status: "success",

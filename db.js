@@ -1,5 +1,5 @@
 const Sequelize = require('sequelize');
-const sequelize = new Sequelize("pxr-alert", "root", "1337", {
+const sequelize = new Sequelize("pxr-alert", "root", "Ass122...", {
     host: "localhost",
     dialect: "mysql"
 })
