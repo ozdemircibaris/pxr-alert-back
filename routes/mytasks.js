@@ -51,7 +51,13 @@ router.get("/:user_id/category/:cat_id", checkAuth, (req, res) => {
         where: {
             user_id: req.params.user_id,
             cat_id: req.params.cat_id
-        }
+        },
+        include: [{
+            model: taskCategoriesModel,
+            where: {
+                id: req.params.cat_id
+            }
+        }]  
     }).then(myTasksCategory => {
         if ( myTasksCategory ) {
             res.status(200).json({
