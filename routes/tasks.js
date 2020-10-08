@@ -2,7 +2,7 @@ let express = require('express');
 let router  = express.Router();
 const checkAuth = require('../middleware/checkauth');
 let _       = require('underscore');
-const { taskModel, taskCategoriesModel } = require("../db")
+const { taskModel, taskCategoriesModel, userModel } = require("../db")
 let cron       = require('node-cron');
 let moment     = require('moment');
 
@@ -34,14 +34,7 @@ let sendNotification = (data) => {
   req.write(JSON.stringify(data));
   req.end();
 };
-let message = {
-  app_id: "85709f52-b07d-4e2b-8a75-6703178bb15a",
-  contents: {"tr": "canım anam akşama ne yemek var", "en": "canım anam akşama ne yemek var"},
-  ios_sound: "sound.wav",
-  android_sound: "sound2",
-  android_channel_id: "cfbd3776-692f-46c3-bd72-8474ac8899ae",
-  included_segments: ["Active Users"]
-};
+
 /* GET just selected users data */
 router.get('/:id', (req, res) => {
   let id = req.params.id;
@@ -49,7 +42,10 @@ router.get('/:id', (req, res) => {
     where : {
       user_id : id
     },
-    include: taskCategoriesModel
+    include: [
+    { model: taskCategoriesModel },
+    { model: userModel }
+  ]
   }).then((tasks) => {
     res.json({
       status : "success",
@@ -59,8 +55,9 @@ router.get('/:id', (req, res) => {
     let monthNow = dateTest.month()
     let dayNow = dateTest.day()
     console.log('dateTest', dateTest)
+
     tasks.map((task) => {
-      // console.log("aa", task.dataValues.jobDate)
+      console.log("aa", task.dataValues)
       let taskSecond  = moment(task.dataValues.jobDate).second();
       let taskMinutes = moment(task.dataValues.jobDate).minutes();
       let taskHour    = moment(task.dataValues.jobDate).hour();
@@ -70,6 +67,14 @@ router.get('/:id', (req, res) => {
       if(monthNow == taskMonth && dayNow == taskDay) {
         cron.schedule(`${taskSecond} ${taskMinutes} ${taskHour} * * *`, () => {
           console.log('run!')
+          let message = {
+            app_id: "85709f52-b07d-4e2b-8a75-6703178bb15a",
+            contents: {"tr": "canım anam akşama ne yemek var", "en": "canım anam akşama ne yemek var"},
+            ios_sound: "sound.wav",
+            android_sound: "sound2",
+            android_channel_id: "cfbd3776-692f-46c3-bd72-8474ac8899ae",
+            // include_player_ids: []
+          };
           sendNotification(message);
         }, {
           timezone: 'Europe/Istanbul'

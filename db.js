@@ -15,6 +15,7 @@ const myTaskModel         = myTask(sequelize, Sequelize);
 const taskCategoriesModel = taskCategories(sequelize, Sequelize);
 
 taskModel.belongsTo(taskCategoriesModel, { foreignKey: 'cat_id' });
+taskModel.belongsTo(userModel, { foreignKey: 'user_id' });
 myTaskModel.belongsTo(taskCategoriesModel, { foreignKey: 'cat_id' });
 
 taskCategoriesModel.hasOne(myTaskModel, { foreignKey: 'cat_id' });
