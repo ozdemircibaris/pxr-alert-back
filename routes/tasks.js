@@ -3,7 +3,45 @@ let router  = express.Router();
 const checkAuth = require('../middleware/checkauth');
 let _       = require('underscore');
 const { taskModel, taskCategoriesModel } = require("../db")
+let cron       = require('node-cron');
+let moment     = require('moment');
 
+let sendNotification = (data) => {
+  let headers = {
+    "Content-Type": "application/json; charset=utf-8",
+    "Authorization": "Basic NThlMjkzYzAtODExZi00Yzk4LWI2ZjItMzlmNzRjMTgxMjNj"
+  };
+
+  let options = {
+    host: "onesignal.com",
+    port: 443,
+    path: "/api/v1/notifications",
+    method: "POST",
+    headers: headers
+  };
+
+  let https = require('https');
+  let req = https.request(options, (res) => {
+    res.on('data', (data) => {
+      console.log("Response:");
+      console.log(JSON.parse(data));
+    });
+  });
+  req.on('error', (e) => {
+    console.log("ERROR:");
+    console.log(e);
+  });
+  req.write(JSON.stringify(data));
+  req.end();
+};
+let message = {
+  app_id: "85709f52-b07d-4e2b-8a75-6703178bb15a",
+  contents: {"tr": "canım anam akşama ne yemek var", "en": "canım anam akşama ne yemek var"},
+  ios_sound: "sound.wav",
+  android_sound: "sound2",
+  android_channel_id: "cfbd3776-692f-46c3-bd72-8474ac8899ae",
+  included_segments: ["Active Users"]
+};
 /* GET just selected users data */
 router.get('/:id', (req, res) => {
   let id = req.params.id;
@@ -17,6 +55,27 @@ router.get('/:id', (req, res) => {
       status : "success",
       data : tasks
     })
+    let dateTest = moment()
+    let monthNow = dateTest.month()
+    let dayNow = dateTest.day()
+    console.log('dateTest', dateTest)
+    tasks.map((task) => {
+      // console.log("aa", task.dataValues.jobDate)
+      let taskSecond  = moment(task.dataValues.jobDate).second();
+      let taskMinutes = moment(task.dataValues.jobDate).minutes();
+      let taskHour    = moment(task.dataValues.jobDate).hour();
+      let taskDay     = moment(task.dataValues.jobDate).day();
+      let taskMonth   = moment(task.dataValues.jobDate).month();
+      console.log({taskHour, taskMinutes, taskSecond, taskDay, taskMonth});
+      if(monthNow == taskMonth && dayNow == taskDay) {
+        cron.schedule(`${taskSecond} ${taskMinutes} ${taskHour} * * *`, () => {
+          console.log('run!')
+          sendNotification(message);
+        }, {
+          timezone: 'Europe/Istanbul'
+        });
+      }
+    })
   })
 })
 
@@ -24,7 +83,6 @@ router.get('/:id', (req, res) => {
 router.post('/', (req, res, next) => {
   const { cat_id, title, subTitle, jobDate, user_id } = req.body;
   if(cat_id && title && subTitle && jobDate && user_id ) {
-    console.log({cat_id, title, subTitle, jobDate, user_id })
     let attributes = {};
     attributes = req.body;
     for (let j = 0; j < user_id.length; j++) {
