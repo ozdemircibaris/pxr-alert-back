@@ -73,7 +73,7 @@ router.get('/:id', (req, res) => {
             ios_sound: "sound.wav",
             android_sound: "sound2",
             android_channel_id: "cfbd3776-692f-46c3-bd72-8474ac8899ae",
-            // include_player_ids: []
+            include_player_ids: [`${task.phoneToken}`]
           };
           sendNotification(message);
         }, {
