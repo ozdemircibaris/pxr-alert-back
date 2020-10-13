@@ -54,16 +54,16 @@ router.get('/:id', (req, res) => {
     let dateTest = moment()
     let monthNow = dateTest.month()
     let dayNow = dateTest.day()
-    console.log('dateTest', dateTest)
+    // console.log('dateTest', dateTest)
 
     tasks.map((task) => {
-      console.log("aa", task.dataValues)
+      // console.log("aa", task.dataValues)
       let taskSecond  = moment(task.dataValues.jobDate).second();
       let taskMinutes = moment(task.dataValues.jobDate).minutes();
       let taskHour    = moment(task.dataValues.jobDate).hour();
       let taskDay     = moment(task.dataValues.jobDate).day();
       let taskMonth   = moment(task.dataValues.jobDate).month();
-      console.log({taskHour, taskMinutes, taskSecond, taskDay, taskMonth});
+      // console.log({taskHour, taskMinutes, taskSecond, taskDay, taskMonth});
       if(monthNow == taskMonth && dayNow == taskDay) {
         cron.schedule(`${taskSecond} ${taskMinutes} ${taskHour} * * *`, () => {
           console.log('run!')
