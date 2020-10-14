@@ -5,6 +5,7 @@ let _       = require('underscore');
 const { taskModel, taskCategoriesModel, userModel } = require("../db")
 let cron       = require('node-cron');
 let moment     = require('moment');
+let x = null;
 
 let sendNotification = (data) => {
   let headers = {
@@ -54,29 +55,29 @@ router.get('/:id', (req, res) => {
     let dateTest = moment()
     let monthNow = dateTest.month()
     let dayNow = dateTest.day()
-    // console.log('dateTest', dateTest)
 
-    tasks.map((task) => {
-      // console.log("aa", task.dataValues)
-      let taskSecond  = moment(task.dataValues.jobDate).second();
-      let taskMinutes = moment(task.dataValues.jobDate).minutes();
-      let taskHour    = moment(task.dataValues.jobDate).hour();
-      let taskDay     = moment(task.dataValues.jobDate).day();
-      let taskMonth   = moment(task.dataValues.jobDate).month();
-      // console.log({taskHour, taskMinutes, taskSecond, taskDay, taskMonth});
+    let taskData = tasks.map((item) => item.toJSON())
+    taskData.map((task) => {
+      let taskSecond  = moment(task.jobDate).second();
+      let taskMinutes = moment(task.jobDate).minutes();
+      let taskHour    = moment(task.jobDate).hour();
+      let taskDay     = moment(task.jobDate).day();
+      let taskMonth   = moment(task.jobDate).month();
+      let message = {
+        app_id: "85709f52-b07d-4e2b-8a75-6703178bb15a",
+        contents: {"tr": "canım anam akşama ne yemek var", "en": "English Message"},
+        ios_sound: "sound.wav",
+        android_sound: "sound2",
+        android_channel_id: "cfbd3776-692f-46c3-bd72-8474ac8899ae",
+        include_player_ids: [`${task.userModel.phoneToken}`]
+      };
       if(monthNow == taskMonth && dayNow == taskDay) {
         cron.schedule(`${taskSecond} ${taskMinutes} ${taskHour} * * *`, () => {
-          console.log('run!')
-          let message = {
-            app_id: "85709f52-b07d-4e2b-8a75-6703178bb15a",
-            contents: {"tr": "canım anam akşama ne yemek var", "en": "canım anam akşama ne yemek var"},
-            ios_sound: "sound.wav",
-            android_sound: "sound2",
-            android_channel_id: "cfbd3776-692f-46c3-bd72-8474ac8899ae",
-            include_player_ids: [`${task.phoneToken}`]
-          };
-          sendNotification(message);
-        }, {
+          if(x != "delivered") {
+            sendNotification(message);
+            x = "delivered";
+          }
+    }, {
           timezone: 'Europe/Istanbul'
         });
       }
@@ -87,6 +88,7 @@ router.get('/:id', (req, res) => {
 /* POST adding data */
 router.post('/', (req, res, next) => {
   const { cat_id, title, subTitle, jobDate, user_id } = req.body;
+  // console.log({cat_id, title, subTitle, jobDate, user_id});
   if(cat_id && title && subTitle && jobDate && user_id ) {
     let attributes = {};
     attributes = req.body;

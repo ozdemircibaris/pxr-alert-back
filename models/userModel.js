@@ -22,6 +22,9 @@ module.exports = (sequelize, Sequelize) => {
                 len: [6, 32]
             }
         },
+        access_token: {
+            type: Sequelize.STRING,
+        },
         phoneToken: {
             type: Sequelize.STRING,
             unique: true,

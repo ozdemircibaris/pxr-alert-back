@@ -21,6 +21,7 @@
     "mysql2": "^2.1.0",
     "node-cron": "^2.0.3",
     "onesignal-node": "^3.1.5",
+    "random-key": "^0.3.2",
     "sequelize": "^6.3.4",
     "underscore": "^1.10.2"
   }
