@@ -71,6 +71,7 @@ router.get('/:id', (req, res) => {
         android_channel_id: "cfbd3776-692f-46c3-bd72-8474ac8899ae",
         include_player_ids: [`${task.userModel.phoneToken}`]
       };
+      console.log({ taskSecond, taskMinutes, taskHour })
       if(monthNow == taskMonth && dayNow == taskDay) {
         cron.schedule(`${taskSecond} ${taskMinutes} ${taskHour} * * *`, () => {
           if(x != "delivered") {
