@@ -74,6 +74,7 @@ router.get('/:id', (req, res) => {
       if(monthNow == taskMonth && dayNow == taskDay) {
         cron.schedule(`${taskSecond} ${taskMinutes} ${taskHour} * * *`, () => {
           if(x != "delivered") {
+            console.log("run!")
             sendNotification(message);
             x = "delivered";
           }
