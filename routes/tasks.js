@@ -7,50 +7,6 @@ let cron       = require('node-cron');
 let moment     = require('moment');
 let x = null;
 
-taskModel.findAll({
-  include: [
-  { model: taskCategoriesModel },
-  { model: userModel }
-]
-}).then((tasks) => {
-  res.json({
-    status : "success",
-    data : tasks
-  })
-  let dateTest = moment()
-  let monthNow = dateTest.month()
-  let dayNow = dateTest.day()
-
-  let taskData = tasks.map((item) => item.toJSON())
-  taskData.map((task) => {
-    let taskSecond  = moment(task.jobDate).second();
-    let taskMinutes = moment(task.jobDate).minutes();
-    let taskHour    = moment(task.jobDate).hour();
-    let taskDay     = moment(task.jobDate).day();
-    let taskMonth   = moment(task.jobDate).month();
-    let message = {
-      app_id: "85709f52-b07d-4e2b-8a75-6703178bb15a",
-      contents: {"tr": "canım anam akşama ne yemek var", "en": "English Message"},
-      ios_sound: "sound.wav",
-      android_sound: "sound2",
-      android_channel_id: "cfbd3776-692f-46c3-bd72-8474ac8899ae",
-      include_player_ids: [`${task.userModel.phoneToken}`]
-    };
-    console.log({ taskSecond, taskMinutes, taskHour })
-    if(monthNow == taskMonth && dayNow == taskDay) {
-      cron.schedule(`${taskSecond} ${taskMinutes} ${taskHour} * * *`, () => {
-        if(x != "delivered") {
-          console.log("run!")
-          sendNotification(message);
-          x = "delivered";
-        }
-  }, {
-        timezone: 'Europe/Istanbul'
-      });
-    }
-  })
-})
-
 let sendNotification = (data) => {
   let headers = {
     "Content-Type": "application/json; charset=utf-8",
@@ -70,6 +26,7 @@ let sendNotification = (data) => {
     res.on('data', (data) => {
       console.log("Response:");
       console.log(JSON.parse(data));
+      x = null;
     });
   });
   req.on('error', (e) => {
@@ -95,6 +52,44 @@ router.get('/:id', (req, res) => {
     res.json({
       status : "success",
       data : tasks
+    })
+    taskModel.findAll({
+      include: [
+      { model: taskCategoriesModel },
+      { model: userModel }
+    ]
+    }).then((tasks) => {
+      let dateTest = moment()
+      let monthNow = dateTest.month()
+      let dayNow = dateTest.day()
+    
+      let taskData = tasks.map((item) => item.toJSON())
+      taskData.map((task) => {
+        let taskSecond  = moment(task.jobDate).second();
+        let taskMinutes = moment(task.jobDate).minutes();
+        let taskHour    = moment(task.jobDate).hour();
+        let taskDay     = moment(task.jobDate).day();
+        let taskMonth   = moment(task.jobDate).month();
+        let message = {
+          app_id: "85709f52-b07d-4e2b-8a75-6703178bb15a",
+          contents: {"tr": "canım anam akşama ne yemek var", "en": "English Message"},
+          ios_sound: "sound.wav",
+          android_sound: "sound2",
+          android_channel_id: "cfbd3776-692f-46c3-bd72-8474ac8899ae",
+          include_player_ids: [`${task.userModel.phoneToken}`]
+        };
+        if(monthNow == taskMonth && dayNow == taskDay) {
+          cron.schedule(`${taskSecond} ${taskMinutes} ${taskHour} * * *`, () => {
+            if(x != "delivered") {
+              console.log("run!")
+              sendNotification(message);
+              x = "delivered";
+            }
+      }, {
+            timezone: 'Europe/Istanbul'
+          });
+        }
+      })
     })
   })
 })
