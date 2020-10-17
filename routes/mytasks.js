@@ -3,15 +3,30 @@ const router = express.Router();
 const checkAuth = require("../middleware/checkauth");
 const { myTaskModel, taskCategoriesModel } = require("../db");
 
-router.post("/add", checkAuth, (req, res) => {
+router.post("/add", (req, res) => {
     const { title, subTitle, user_id, cat_id } = req.body;
 
     if ( title != null && subTitle != null && user_id != null && cat_id != null ) {
         myTaskModel.create(req.body).then(myTask => {
-            res.json({
-                status: "success",
-                data: myTask
-            });
+            taskCategoriesModel.findOne({
+                where: {
+                    id: cat_id,
+                }
+            }).then(taskCategories => {
+                if ( taskCategories ) {
+                    myTask.dataValues.taskCategories = taskCategories;
+
+                    res.json({
+                        status: "success",
+                        data: myTask
+                    });
+                } else {
+                    res.status(404).json({
+                        status: "error",
+                        message: "no taskCategory found"
+                    })
+                }
+            })
         }, (e) => {
             res.status(500).json({
                 status: "error"
