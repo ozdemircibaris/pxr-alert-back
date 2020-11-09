@@ -62,7 +62,7 @@ router.get('/:id', (req, res) => {
       let dateTest = moment()
       let monthNow = dateTest.month()
       let dayNow = dateTest.day()
-    
+
       let taskData = tasks.map((item) => item.toJSON())
       taskData.map((task) => {
         let taskSecond  = moment(task.jobDate).second();
@@ -84,6 +84,9 @@ router.get('/:id', (req, res) => {
               console.log("run!")
               sendNotification(message);
               x = "delivered";
+              setTimeout(() => {
+                x = null;
+              }, 500);
             }
       }, {
             timezone: 'Europe/Istanbul'
